@@ -6,7 +6,13 @@ const generateRespose = require('./src/services/ai.service')
 
 
 const httpServer = createServer(app);
-const io = new Server(httpServer, { /* options */ });
+const io = new Server(httpServer, {
+    cors: {
+        origin: "http://localhost:5173", // Adjust 
+    }
+});
+
+
 
 
 const chatHistory = []
@@ -23,13 +29,13 @@ io.on("connection", (socket) => {
             role: "user",
             parts: [{text: data}]
         })
-        const responseOfAi = await generateRespose(chatHistory);
+        const mama = await generateRespose(chatHistory);
         chatHistory.push({
             role: "model",
-            parts: [{text: responseOfAi}]
+            parts: [{text: mama}]
         })
-        console.log("ai response: ",responseOfAi);
-        socket.emit('ai-response',{responseOfAi})
+        
+        socket.emit('ai-response',mama)
     })
 
 
